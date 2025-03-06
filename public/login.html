@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: left;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 22px;
+            color: #333;
+        }
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        input, button {
+            width: 100%; /* Ensures all input fields & button are the same width */
+            padding: 12px; /* Uniform padding */
+            font-size: 16px; /* Consistent font size */
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #flagContainer {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login Panel</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+
+            <!-- Flag will appear here after successful login -->
+            <div id="flagContainer"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("Login successful!");
+                document.getElementById("flagContainer").innerHTML = 
+                    `Here's your flag: <span>${data.flag}</span>`;
+            } else {
+                alert(data.message);
+                document.getElementById("flagContainer").innerHTML = ""; // Hide flag if login fails
+            }
+        });
+    </script>
+</body>
+</html>
